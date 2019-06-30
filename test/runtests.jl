@@ -27,10 +27,10 @@ for data_type in [Int16,Int32,Int64,Float16,Float32,Float64,ComplexF16,ComplexF3
         @assert length(data_arr) == data_num
         @assert length(data_arr_i) == data_num_i
 
-        @assert duration(data_vec) == data_num/data_freq
-        @assert duration(data_vec_i) == data_num_i/data_freq_i
-        @assert duration(data_arr) == data_num/data_freq
-        @assert duration(data_arr_i) == data_num_i/data_freq_i
+        @assert abs(duration(data_vec) - data_num/data_freq) < 0.01
+        @assert abs(duration(data_vec_i) - data_num_i/data_freq_i) < 0.01
+        @assert abs(duration(data_arr) - data_num/data_freq) < 0.01
+        @assert abs(duration(data_arr_i) - data_num_i/data_freq_i) < 0.01
 
         for i=1:20
             ii = rand(1:data_num-2)

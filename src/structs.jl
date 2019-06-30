@@ -85,7 +85,7 @@ length(v::FreqVector) = length(v.data)
 length(a::FreqArray) = size(a.data,1)
 
 """length of `FreqData` in seconds"""
-duration(v::FreqData) = length(v)*(1/v.freq)
+duration(v::FreqData) = length(v)/v.freq
 
 getindex(v::FreqVector,I::itype) = FreqVector(view(v.data,I),v.freq,v.name,v.code)
 getindex(a::FreqArray,I::Union{itype,Int}) = FreqArray(view(a.data,I,Colon()),a.freq,a.names,a.code)
