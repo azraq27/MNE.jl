@@ -1,3 +1,5 @@
+using MNE
+
 # Random data params
 # `_i` variables have integer frequencies
 data_freq = rand()*5000
