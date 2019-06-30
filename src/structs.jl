@@ -47,16 +47,20 @@ mutable struct FreqArray{T} <: FreqData where T<:Number
     names::Vector{String}
     code::Symbol
 
-    function FreqArray(data::AbstractArray{T,2},freq::K;names::Vector{String}=[],code::Symbol=:unknown) where {T<:Number,K<:Number}
-        if length(names)==0
-            names = ["" for i=1:size(data,2)]
-        end
+    function FreqArray(data::AbstractArray{T,2},freq::K,Vector{String},code::Symbol) where {T<:Number,K<:Number}
         if size(data,2) != length(names)
             error("""Trying to create a FreqArray with data size $(size(data)) and names length $(length(names))
                     Data must be arranged in columns""")
         end
         return new{T}(data,Float64(freq),names,code)
     end
+end
+
+function FreqArray(data::AbstractArray{T,2},freq::K;names::Vector{String}=[],code::Symbol=:unknown) where {T<:Number,K<:Number}
+    if length(names)==0
+        names = ["" for i=1:size(data,2)]
+    end
+    FreqArray(data,freq,names,code)
 end
 
 function FreqArray(v::FreqVector{T}...) where T
