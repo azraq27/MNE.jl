@@ -1,0 +1,4 @@
+name = "MNE"
+uuid = "7c8a9f54-9b74-11e9-1b63-ffd4161396fa"
+authors = ["Bill Gross <bill.gross@me.com>"]
+version = "0.1.0"
