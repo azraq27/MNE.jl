@@ -24,8 +24,8 @@ for data_type in [Int16,Int32,Int64,Float16,Float32,Float64,ComplexF16,ComplexF3
 
         @assert length(data_vec) == data_num
         @assert length(data_vec_i) == data_num_i
-        @assert length(data_arr) == data_nchann
-        @assert length(data_arr_i) == data_nchann
+        @assert length(data_arr) == data_num
+        @assert length(data_arr_i) == data_num_i
 
         @assert duration(data_vec) == data_num/data_freq
         @assert duration(data_vec_i) == data_num_i/data_freq_i
