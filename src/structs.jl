@@ -27,7 +27,7 @@ mutable struct FreqVector{T} <: FreqData where T<:Number
     code::Symbol
 end
 
-FreqVector(data::AbstractArray{T,1},freq::Float64;name::String="",code::Symbol=:unknown) where {T<:Number} = FreqVector(data,freq,name,code)
+FreqVector(data::AbstractArray{T,1},freq::K;name::String="",code::Symbol=:unknown) where {T<:Number,K<:Real} = FreqVector(data,Float64(freq),name,code)
 
 """
     FreqArray{T}(data::AbstractArray{T,2}, freq::Float64, names::Vector{String}, code::Symbol) where T<:Number
