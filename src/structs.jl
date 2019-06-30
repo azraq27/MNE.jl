@@ -10,7 +10,7 @@ export channel,times
 abstract type FreqData end
 
 """
-    FreqVector{T}(data::AbstractArray{T,1}, freq::Float64, name::String, code::Symbol) where T<:Number
+    FreqVector{T}(data::AbstractArray{T,1}, freq::Float64; name::String="", code::Symbol=:unknown) where T<:Number
 
 Struct of a single `Vector` frequency data.
 * `data`: raw data points
@@ -30,13 +30,13 @@ end
 FreqVector(data::AbstractArray{T,1},freq::K;name::String="",code::Symbol=:unknown) where {T<:Number,K<:Real} = FreqVector(data,Float64(freq),name,code)
 
 """
-    FreqArray{T}(data::AbstractArray{T,2}, freq::Float64, names::Vector{String}, code::Symbol) where T<:Number
+    FreqArray{T}(data::AbstractArray{T,2}, freq::Float64; names::Vector{String}=[], code::Symbol=:unknown) where T<:Number
 
 Struct of an `Array` frequency data. Makes the assumption `data` was collected at same frequency, synced in time.
 
 * `data`: raw data points; arranged as (time, channels), column-major
 * `freq`: data frequency
-* `name`: `Vector{String}` of names
+* `names`: `Vector{String}` of names (default = ["","" ...])
 * `code`: arbitrary data type as `Symbol` (default = `:unknown`)
 
 Data can be accessed by []-notation, or using the helper function `channel` to return a single `FreqVector`
@@ -47,12 +47,15 @@ mutable struct FreqArray{T} <: FreqData where T<:Number
     names::Vector{String}
     code::Symbol
 
-    function FreqArray(data::AbstractArray{T,2},freq::Float64,names::Vector{String},code::Symbol=:unknown) where T<:Number
+    function FreqArray(data::AbstractArray{T,2},freq::K;names::Vector{String}=[],code::Symbol=:unknown) where {T<:Number,K<:Number}
+        if length(names)==0
+            names = ["" for i=1:size(data,2)]
+        end
         if size(data,2) != length(names)
             error("""Trying to create a FreqArray with data size $(size(data)) and names length $(length(names))
                     Data must be arranged in columns""")
         end
-        return new{T}(data,freq,names,code)
+        return new{T}(data,Float64(freq),names,code)
     end
 end
 
