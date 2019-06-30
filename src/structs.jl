@@ -88,10 +88,10 @@ length(a::FreqArray) = size(a.data,1)
 duration(v::FreqData) = length(v)*(1/v.freq)
 
 getindex(v::FreqVector,I::itype) = FreqVector(view(v.data,I),v.freq,v.name,v.code)
-getindex(a::FreqArray,I::Union{itype,Int}) = FreqVector(view(a.data,I,Colon()),a.freq,a.name,a.code)
+getindex(a::FreqArray,I::Union{itype,Int}) = FreqVector(view(a.data,I,Colon()),a.freq,a.names,a.code)
 
 getindex(v::FreqVector,I::StepRange) = FreqVector(view(v.data,I),v.freq/I.step,v.name,v.code)
-getindex(a::FreqArray,I::StepRange) = FreqVector(view(a.data,I,Colon()),a.freq/I.step,a.name,a.code)
+getindex(a::FreqArray,I::StepRange) = FreqVector(view(a.data,I,Colon()),a.freq/I.step,a.names,a.code)
 
 getindex(v::FreqVector,I::Int) = v.data[I]
 
