@@ -82,7 +82,7 @@ import Base.length,Base.getindex
 itype = Union{Vector{Int},UnitRange,Colon}
 
 length(v::FreqVector) = length(v.data)
-length(a::FreqArray) = length(a.names)
+length(a::FreqArray) = size(a.data,1)
 
 """length of `FreqData` in seconds"""
 duration(v::FreqData) = length(v)*(1/v.freq)
