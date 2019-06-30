@@ -19,8 +19,8 @@ for data_type in [Int16,Int32,Int64,Float16,Float32,Float64,ComplexF16,ComplexF3
 
         data_vec = FreqVector(raw_vec,data_freq,name="test",code=:test)
         data_vec_i = FreqVector(raw_vec_i,data_freq_i,name="test",code=:test)
-        data_arr = FreqArray(raw_arr,data_freq,names=["channel_$i" for i=1:data_nchann],code=:t)
-        data_arr_i = FreqArray(raw_arr_i,data_freq_i,names=["channel_$i" for i=1:data_nchann],code=:t)
+        data_arr = FreqArray(raw_arr,data_freq,names=["channel_$i" for i=1:data_nchann],code=:test)
+        data_arr_i = FreqArray(raw_arr_i,data_freq_i,names=["channel_$i" for i=1:data_nchann],code=:test)
 
         @assert length(data_vec) == data_num
         @assert length(data_vec_i) == data_num_i
