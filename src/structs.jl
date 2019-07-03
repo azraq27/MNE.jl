@@ -81,23 +81,37 @@ function FreqArray(v::FreqVector{T}...) where T
     FreqArray(data,freqs[1],names,codes[1])
 end
 
-import Base.length,Base.getindex
+import Base.length,Base.getindex,Base.lastindex,Base.==
 
 itype = Union{Vector{Int},UnitRange,Colon}
 
 length(v::FreqVector) = length(v.data)
 length(a::FreqArray) = size(a.data,1)
 
+lastindex(v::FreqData) = length(v)
+lastindex(a::FreqArray,d::Int) = size(a.data,d)
+
+function ==(a::FreqVector,b::FreqVector)
+    ((a.code != b.code) || (a.freq != b.freq) || (a.name != b.name)) && return false
+    return a.data == b.data
+end
+
+function ==(a::FreqArray,b::FreqArray)
+    ((a.code != b.code) || (a.freq != b.freq) || (a.names != b.names)) && return false
+    return a.data == b.data
+end
+
 """length of `FreqData` in seconds"""
 duration(v::FreqData) = length(v)/v.freq
 
 getindex(v::FreqVector,I::itype) = FreqVector(view(v.data,I),v.freq,v.name,v.code)
-getindex(a::FreqArray,I::Union{itype,Int}) = FreqArray(view(a.data,I,Colon()),a.freq,a.names,a.code)
+getindex(a::FreqArray,I::itype) = FreqArray(view(a.data,I,Colon()),a.freq,a.names,a.code)
 
 getindex(v::FreqVector,I::StepRange) = FreqVector(view(v.data,I),v.freq/I.step,v.name,v.code)
 getindex(a::FreqArray,I::StepRange) = FreqArray(view(a.data,I,Colon()),a.freq/I.step,a.names,a.code)
 
 getindex(v::FreqVector,I::Int) = v.data[I]
+getindex(a::FreqArray,I::Int) = FreqArray(view(a.data,I:I,Colon()),a.freq,a.names,a.code)
 
 """Convert `s` seconds to data index"""
 stoi(a::FreqData,s::T) where T<:Real = round(Int,s*a.freq)

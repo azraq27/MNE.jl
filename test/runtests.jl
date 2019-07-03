@@ -1,7 +1,7 @@
 using MNE
 
 for data_type in [Int16,Int32,Int64,Float16,Float32,Float64,ComplexF16,ComplexF32,ComplexF64]
-    for i=1:10
+    for i=1:5
         # Random data params
         # `_i` variables have integer frequencies
         data_freq = rand()*5000
@@ -32,41 +32,56 @@ for data_type in [Int16,Int32,Int64,Float16,Float32,Float64,ComplexF16,ComplexF3
         @assert abs(duration(data_arr) - data_num/data_freq) < 0.01
         @assert abs(duration(data_arr_i) - data_num_i/data_freq_i) < 0.01
 
-        for i=1:20
+        @assert stoi(data_vec,0) == 0
+        @assert stoi(data_vec_i,0) == 0
+        @assert abs(stoi(data_vec,data_dur) - data_num) <= 1
+        @assert abs(stoi(data_vec_i,data_dur) - data_num_i) <= 1
+
+        @assert itos(data_arr,0) == 0
+        @assert itos(data_arr_i,0) == 0
+        @assert abs(itos(data_arr,data_num) - data_dur) <= 1/data_freq
+        @assert abs(itos(data_arr_i,data_num_i) - data_dur) <= 1/data_freq_i
+
+        @assert itos(data_vec,0) == 0
+        @assert itos(data_vec_i,0) == 0
+        @assert abs(itos(data_vec,data_num) - data_dur) <= 1/data_freq
+        @assert abs(itos(data_vec_i,data_num_i) - data_dur) <= 1/data_freq_i
+
+        @assert itos(data_arr,0) == 0
+        @assert itos(data_arr_i,0) == 0
+        @assert abs(itos(data_arr,data_num) - data_dur) <= 1/data_freq
+        @assert abs(itos(data_arr_i,data_num_i) - data_dur) <= 1/data_freq_i
+
+        for i=1:5
             ii = rand(1:data_num-2)
             iii = rand(ii+1:data_num)
             c = rand(1:data_nchann)
             @assert data_vec[ii] == raw_vec[ii]
             @assert data_vec[ii:iii].data == raw_vec[ii:iii]
-            @assert data_arr[ii].data = raw_arr[ii,:]
+            @assert data_arr[ii].data == raw_arr[ii:ii,:]
             @assert data_arr[ii:iii].data == raw_arr[ii:iii,:]
 
             ii = rand(1:data_num_i-2)
             iii = rand(ii+1:data_num_i)
             @assert data_vec_i[ii] == raw_vec_i[ii]
             @assert data_vec_i[ii:iii].data == raw_vec_i[ii:iii]
-            @assert data_arr_i[ii].data = raw_arr_i[ii,:]
+            @assert data_arr_i[ii].data == raw_arr_i[ii:ii,:]
             @assert data_arr_i[ii:iii].data == raw_arr_i[ii:iii,:]
+
+            @assert data_vec[1/data_freq] == data_vec[1]
+            @assert data_vec_i[1/data_freq_i] == data_vec_i[1]
+            @assert data_arr[1/data_freq] == data_arr[1]
+            @assert data_arr_i[1/data_freq_i] == data_arr_i[1]
+            @assert data_vec[data_num/data_freq] == data_vec[end]
+            @assert data_vec_i[data_num_i/data_freq_i] == data_vec_i[end]
+            @assert data_arr[data_num/data_freq] == data_arr[end]
+            @assert data_arr_i[data_num_i/data_freq_i] == data_arr_i[end]
         end
     end
 end
+
 #=
-getindex(v::FreqVector,I::itype) = FreqVector(view(v.data,I),v.freq,v.name,v.code)
-getindex(a::FreqArray,I::Union{itype,Int}) = FreqVector(view(a.data,I,Colon()),a.freq,a.name,a.code)
 
-getindex(v::FreqVector,I::StepRange) = FreqVector(view(v.data,I),v.freq/I.step,v.name,v.code)
-getindex(a::FreqArray,I::StepRange) = FreqVector(view(a.data,I,Colon()),a.freq/I.step,a.name,a.code)
-
-getindex(v::FreqVector,I::Int) = v.data[I]
-
-"""Convert `s` seconds to data index"""
-stoi(a::FreqData,s::T) where T<:Real = round(Int,s*a.freq)
-stoi(a::FreqData,s::AbstractArray{T,1}) where T<:Real = [stoi(a,ss) for ss in s]
-"""Convert data index `i` to seconds"""
-itos(a::FreqData,i::Int) = i/a.freq
-itos(a::FreqData,i::AbstractArray{Int,1}) = [itos(a,ii) for ii in i]
-
-getindex(a::FreqData,f::Union{T,AbstractArray{T,1}}) where T<:AbstractFloat = getindex(a,stoi(a,f))
 
 """Extract a specific channel from `FreqArray` and returns a single `FreqVector`"""
 channel(a::FreqArray,c::Int,I::itype) = FreqVector(view(a.data,I,c),a.freq,a.names[c],a.code)
