@@ -60,6 +60,12 @@ for data_type in [Int16,Int32,Int64,Float16,Float32,Float64,ComplexF16,ComplexF3
             @assert data_vec[ii:iii].data == raw_vec[ii:iii]
             @assert data_arr[ii].data == raw_arr[ii:ii,:]
             @assert data_arr[ii:iii].data == raw_arr[ii:iii,:]
+            @assert channel(data_arr,c,ii) == raw_arr[ii,c]
+            @assert channel(data_arr,c,ii:iii).data == raw_arr[ii:iii,c]
+            @assert channel(data_arr,c).data == raw_arr[:,c]
+            @assert channel(data_arr,"channel_$c",ii) == raw_arr[ii,c]
+            @assert channel(data_arr,"channel_$c",ii:iii).data == raw_arr[ii:iii,c]
+            @assert channel(data_arr,"channel_$c").data == raw_arr[:,c]
 
             ii = rand(1:data_num_i-2)
             iii = rand(ii+1:data_num_i)
@@ -67,6 +73,12 @@ for data_type in [Int16,Int32,Int64,Float16,Float32,Float64,ComplexF16,ComplexF3
             @assert data_vec_i[ii:iii].data == raw_vec_i[ii:iii]
             @assert data_arr_i[ii].data == raw_arr_i[ii:ii,:]
             @assert data_arr_i[ii:iii].data == raw_arr_i[ii:iii,:]
+            @assert channel(data_arr_i,c,ii) == raw_arr_i[ii,c]
+            @assert channel(data_arr_i,c,ii:iii).data == raw_arr_i[ii:iii,c]
+            @assert channel(data_arr_i,c).data == raw_arr_i[:,c]
+            @assert channel(data_arr_i,"channel_$c",ii) == raw_arr_i[ii,c]
+            @assert channel(data_arr_i,"channel_$c",ii:iii).data == raw_arr_i[ii:iii,c]
+            @assert channel(data_arr_i,"channel_$c").data == raw_arr_i[:,c]
 
             @assert data_vec[1/data_freq] == data_vec[1]
             @assert data_vec_i[1/data_freq_i] == data_vec_i[1]

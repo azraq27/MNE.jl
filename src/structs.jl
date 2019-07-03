@@ -124,8 +124,10 @@ getindex(a::FreqData,f::Union{T,AbstractArray{T,1}}) where T<:AbstractFloat = ge
 
 """Extract a specific channel from `FreqArray` and returns a single `FreqVector`"""
 channel(a::FreqArray,c::Int,I::itype) = FreqVector(view(a.data,I,c),a.freq,a.names[c],a.code)
+channel(a::FreqArray,c::Int,I::Int) = a.data[I,c]
 channel(a::FreqArray,c::Int) = channel(a,c,Colon())
 channel(a::FreqArray,c::String,I::itype) = channel(a,findfirst(isequal(c),a.names),I)
+channel(a::FreqArray,c::String,I::Int) = a.data[I,findfirst(isequal(c),a.names)]
 channel(a::FreqArray,c::String) = channel(a,c,Colon())
 
 """Extract a set of channels from `FreqArray` and returns another `FreqArray`"""
