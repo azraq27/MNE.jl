@@ -1,4 +1,6 @@
 language: julia
+env:
+  - PYTHON=""
 os:
   - linux
   - osx
