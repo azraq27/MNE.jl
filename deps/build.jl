@@ -5,6 +5,7 @@ try
     pyimport("mne")
 catch
     # We need to try to install it
+    #=
     using Conda,HTTP,YAML
 
     env_url = "https://raw.githubusercontent.com/mne-tools/mne-python/master/environment.yml"
@@ -15,7 +16,7 @@ catch
     env = YAML.load(IOBuffer(r.body))
     Conda.add(Vector{String}(filter(d->d isa String,env["dependencies"])))
 
-    pip = pyimport("pip._internal")
+    pip = pyimport_conda("pip._internal","pip")
 
     pip_cmd = ["install"]
     for d in filter(d->d isa Dict && haskey(d,"pip"),env["dependencies"])[1]["pip"]
@@ -34,7 +35,9 @@ catch
     py"""
     from pip._internal import main
     main(['install','mne'])
-    """=#
-    
+    """=#=#
+
+    Conda.add("mne",channel="conda-forge")
+
     pyimport("mne")
 end
