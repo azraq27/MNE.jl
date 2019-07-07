@@ -17,10 +17,10 @@ for data_type in [Int16,Int32,Int64,Float16,Float32,Float64,ComplexF16,ComplexF3
         raw_arr = rand(data_type,(data_num,data_nchann))
         raw_arr_i = rand(data_type,(data_num_i,data_nchann))
 
-        data_vec = FreqVector(raw_vec,data_freq,name="test",code=:test)
-        data_vec_i = FreqVector(raw_vec_i,data_freq_i,name="test",code=:test)
-        data_arr = FreqArray(raw_arr,data_freq,names=["channel_$i" for i=1:data_nchann],code=:test)
-        data_arr_i = FreqArray(raw_arr_i,data_freq_i,names=["channel_$i" for i=1:data_nchann],code=:test)
+        data_vec = SampleVector(raw_vec,data_freq,name="test",code=:test)
+        data_vec_i = SampleVector(raw_vec_i,data_freq_i,name="test",code=:test)
+        data_arr = SampleArray(raw_arr,data_freq,names=["channel_$i" for i=1:data_nchann],code=:test)
+        data_arr_i = SampleArray(raw_arr_i,data_freq_i,names=["channel_$i" for i=1:data_nchann],code=:test)
 
         @assert length(data_vec) == data_num
         @assert length(data_vec_i) == data_num_i
@@ -95,20 +95,20 @@ end
 #=
 
 
-"""Extract a specific channel from `FreqArray` and returns a single `FreqVector`"""
-channel(a::FreqArray,c::Int,I::itype) = FreqVector(view(a.data,I,c),a.freq,a.names[c],a.code)
-channel(a::FreqArray,c::Int) = channel(a,c,Colon())
-channel(a::FreqArray,c::String,I::itype) = channel(a,findfirst(isequal(c),a.names),I)
-channel(a::FreqArray,c::String) = channel(a,c,Colon())
+"""Extract a specific channel from `SampleArray` and returns a single `SampleVector`"""
+channel(a::SampleArray,c::Int,I::itype) = SampleVector(view(a.data,I,c),a.freq,a.names[c],a.code)
+channel(a::SampleArray,c::Int) = channel(a,c,Colon())
+channel(a::SampleArray,c::String,I::itype) = channel(a,findfirst(isequal(c),a.names),I)
+channel(a::SampleArray,c::String) = channel(a,c,Colon())
 
-"""Extract a set of channels from `FreqArray` and returns another `FreqArray`"""
-channel(a::FreqArray,c::itype,I::itype) = FreqArray(view(a.data,I,c),a.freq,a.names[c],a.code)
-channel(a::FreqArray,c::itype) = channel(a,c,Colon())
-channel(a::FreqArray,c::Vector{String}) = channel(a,[findfirst(isequal(cc),a.names) for cc in c])
+"""Extract a set of channels from `SampleArray` and returns another `SampleArray`"""
+channel(a::SampleArray,c::itype,I::itype) = SampleArray(view(a.data,I,c),a.freq,a.names[c],a.code)
+channel(a::SampleArray,c::itype) = channel(a,c,Colon())
+channel(a::SampleArray,c::Vector{String}) = channel(a,[findfirst(isequal(cc),a.names) for cc in c])
 
 """
-    times(a::FreqVector)
+    times(a::SampleVector)
 
 Create a series of times (in seconds) the same length as data (useful as X-axis for plotting)"""
-times(a::FreqData) = [itos(a,i) for i in 1:length(a)]
+times(a::SampleData) = [itos(a,i) for i in 1:length(a)]
 =#
