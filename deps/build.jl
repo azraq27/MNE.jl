@@ -25,6 +25,7 @@ catch
     end
     pip.main(pip_cmd)
 =#
+    pip = pyimport_conda("pip")
     py"""
     from pip._internal import main
     main(['install','mne'])
