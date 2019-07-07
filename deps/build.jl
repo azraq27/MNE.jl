@@ -36,7 +36,8 @@ catch
     from pip._internal import main
     main(['install','mne'])
     """=#=#
-
+    using Conda
+    
     Conda.add("mne",channel="conda-forge")
 
     pyimport("mne")
