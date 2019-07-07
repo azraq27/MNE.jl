@@ -25,10 +25,9 @@ catch
     end
     pip.main(pip_cmd)
 =#
-    pip = pyimport("pip._internal")
-
-    pip_cmd = ["install","mne"]
-    pip.main(pip_cmd)
-
+    py"""
+    from pip._internal import main
+    main(['install','mne'])
+    """
     pyimport("mne")
 end
