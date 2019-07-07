@@ -5,8 +5,7 @@ try
     pyimport("mne")
 catch
     # We need to try to install it
-    #=
-    using Conda,HTTP,YAML
+#=    using HTTP,YAML
 
     env_url = "https://raw.githubusercontent.com/mne-tools/mne-python/master/environment.yml"
 
@@ -25,7 +24,13 @@ catch
     end
     pip.main(pip_cmd)
 =#
-    pip = pyimport_conda("pip")
+    try
+        pip = pyimport_conda("pip","pip")
+    catch
+        pypi_url = "https://bootstrap.pypa.io/get-pip.py"
+        r = HTTP.request("GET",pypi_url)
+        PyCall.eval(String(r.body))
+    end
     py"""
     from pip._internal import main
     main(['install','mne'])
