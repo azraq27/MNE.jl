@@ -5,8 +5,8 @@ try
     pyimport("mne")
 catch
     # We need to try to install it
-#=    using HTTP,YAML
-
+    using HTTP,YAML
+#=
     env_url = "https://raw.githubusercontent.com/mne-tools/mne-python/master/environment.yml"
 
     r = HTTP.request("GET",env_url)
