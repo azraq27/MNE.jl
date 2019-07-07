@@ -168,20 +168,21 @@ end
 duration(v::SampleData) = v.times[end] - v.times[1] + Millisecond(round(Int,1000/v.freq))
 
 getindex(v::SampleVector,I::itype) = SampleVector(view(v.data,I),view(v.times,I),v.freq,v.name,v.code)
-getindex(a::SampleArray,I::itype) = SampleArray(view(a.data,I,Colon()),view(a.times,I,Colon()),a.freq,a.names,a.code)
+getindex(a::SampleArray,I::itype) = SampleArray(view(a.data,I,Colon()),view(a.times,I),a.freq,a.names,a.code)
 
 getindex(v::SampleVector,I::StepRange) = SampleVector(view(v.data,I),view(v.times,I),v.freq/I.step,v.name,v.code)
-getindex(a::SampleArray,I::StepRange) = SampleArray(view(a.data,I,Colon()),view(a.times,I,Colon()),a.freq/I.step,a.names,a.code)
+getindex(a::SampleArray,I::StepRange) = SampleArray(view(a.data,I,Colon()),view(a.times,I),a.freq/I.step,a.names,a.code)
 
 getindex(v::SampleVector,I::Int) = v.data[I]
-getindex(a::SampleArray,I::Int) = SampleArray(view(a.data,I:I,Colon()),view(a.times,I:I,Colon()),a.freq,a.names,a.code)
+getindex(a::SampleArray,I::Int) = SampleArray(view(a.data,I:I,Colon()),view(a.times,I:I),a.freq,a.names,a.code)
 
 # If passing a Float or DateTime as the index (and the times are corresponding), return the first index at or after given time
 getindex(a::SampleData{T,K},f::F) where {T,K<:AbstractFloat,F<:AbstractFloat} = getindex(a,searchsortedfirst(a.times,f))
 getindex(a::SampleData{T,K},f::F) where {T,K<:DateTime,F<:DateTime} = getindex(a,searchsortedfirst(a.times,f))
+getindex(a::SampleData{T,K},f::F) where {T,K<:DateTime,F<:TimePeriod} = getindex(a,searchsortedfirst(a.times,f+a.times[1]))
 
 """Extract a specific channel from `SampleArray` and returns a single `SampleVector`"""
-channel(a::SampleArray,c::Int,I::itype) = SampleVector(view(a.data,I,c),a.freq,a.names[c],a.code)
+channel(a::SampleArray,c::Int,I::itype) = SampleVector(view(a.data,I,c),view(a.times,I),a.freq,a.names[c],a.code)
 channel(a::SampleArray,c::Int,I::Int) = a.data[I,c]
 channel(a::SampleArray,c::Int) = channel(a,c,Colon())
 channel(a::SampleArray,c::String,I::itype) = channel(a,findfirst(isequal(c),a.names),I)
@@ -189,6 +190,6 @@ channel(a::SampleArray,c::String,I::Int) = a.data[I,findfirst(isequal(c),a.names
 channel(a::SampleArray,c::String) = channel(a,c,Colon())
 
 """Extract a set of channels from `SampleArray` and returns another `SampleArray`"""
-channel(a::SampleArray,c::itype,I::itype) = SampleArray(view(a.data,I,c),a.freq,a.names[c],a.code)
+channel(a::SampleArray,c::itype,I::itype) = SampleArray(view(a.data,I,c),view(a.times,I),a.freq,a.names[c],a.code)
 channel(a::SampleArray,c::itype) = channel(a,c,Colon())
 channel(a::SampleArray,c::Vector{String}) = channel(a,[findfirst(isequal(cc),a.names) for cc in c])
