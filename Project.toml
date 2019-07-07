@@ -4,6 +4,9 @@ authors = ["Bill Gross <bill.gross@me.com>"]
 version = "0.1.0"
 
 [deps]
-RawFile = "7a16de70-abc6-11e8-02b0-4fe68abe0eac"
+Conda = "8f4d0f93-b110-5947-807f-2305c1781a2d"
 Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
+HTTP = "cd3eb016-35fb-5094-929b-558a96fad6f3"
 PyCall = "438e738f-606a-5dbb-bf0a-cddfbfd45ab0"
+RawFile = "7a16de70-abc6-11e8-02b0-4fe68abe0eac"
+YAML = "ddb6d928-2868-570f-bddf-ab3f9cf99eb6"
