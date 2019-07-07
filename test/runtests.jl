@@ -1,4 +1,4 @@
-using MNE
+using MNE,Dates
 
 for data_type in [Int16,Int32,Int64,Float16,Float32,Float64,ComplexF16,ComplexF32,ComplexF64]
     for i=1:5
@@ -27,10 +27,10 @@ for data_type in [Int16,Int32,Int64,Float16,Float32,Float64,ComplexF16,ComplexF3
         @assert length(data_arr) == data_num
         @assert length(data_arr_i) == data_num_i
 
-        @assert abs(duration(data_vec) - Millisecond(round(Int,1000*data_num/data_freq))) < 0.01
-        @assert abs(duration(data_vec_i) - Millisecond(round(Int,1000*data_num_i/data_freq_i))) < 0.01
-        @assert abs(duration(data_arr) - Millisecond(round(Int,1000*data_num/data_freq))) < 0.01
-        @assert abs(duration(data_arr_i) - Millisecond(round(Int,1000*data_num_i/data_freq_i))) < 0.01
+        @assert abs(duration(data_vec) - Millisecond(round(Int,1000*data_num/data_freq))) < Millisecond(10)
+        @assert abs(duration(data_vec_i) - Millisecond(round(Int,1000*data_num_i/data_freq_i))) < Millisecond(10)
+        @assert abs(duration(data_arr) - Millisecond(round(Int,1000*data_num/data_freq))) < Millisecond(10)
+        @assert abs(duration(data_arr_i) - Millisecond(round(Int,1000*data_num_i/data_freq_i))) < Millisecond(10)
 
         @assert stoi(data_vec,0) == 0
         @assert stoi(data_vec_i,0) == 0

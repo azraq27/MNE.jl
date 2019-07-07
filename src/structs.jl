@@ -86,7 +86,7 @@ Struct of an `Array` frequency data. Makes the assumption `data` was collected a
 
 Data can be accessed by []-notation, or using the helper function `channel` to return a single `SampleVector`
 """
-mutable struct SampleArray{T<:Number,K<:Union{AbstractFloat,DateTime}}
+mutable struct SampleArray{T<:Number,K<:Union{AbstractFloat,DateTime}} <: SampleData{T,K}
     data::AbstractArray{T,2}
     times::AbstractArray{K,1}
     freq::Float64
