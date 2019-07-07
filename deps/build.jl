@@ -5,6 +5,7 @@ try
     pyimport("mne")
 catch
     # We need to try to install it
+    #=
     using Conda,HTTP,YAML
 
     env_url = "https://raw.githubusercontent.com/mne-tools/mne-python/master/environment.yml"
@@ -22,6 +23,11 @@ catch
         occursin("--only-binary",d) && (d = split(d)[1])
         push!(pip_cmd,d)
     end
+    pip.main(pip_cmd)
+=#
+    pip = pyimport("pip._internal")
+
+    pip_cmd = ["install","mne"]
     pip.main(pip_cmd)
 
     pyimport("mne")
